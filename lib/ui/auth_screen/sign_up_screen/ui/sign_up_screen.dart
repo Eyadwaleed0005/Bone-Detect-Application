@@ -1,0 +1,113 @@
+import 'package:bonedetect/core/helper/spacer.dart';
+import 'package:bonedetect/core/helper/validation_data.dart';
+import 'package:bonedetect/core/routes/route_names.dart';
+import 'package:bonedetect/core/style/app_color.dart';
+import 'package:bonedetect/core/widgets/app_button.dart';
+import 'package:bonedetect/core/widgets/app_text_field.dart';
+import 'package:bonedetect/ui/auth_screen/login_screen/ui/widgets/login_bottom_container.dart';
+import 'package:bonedetect/ui/auth_screen/sign_up_screen/logic/sign_up_cubit.dart';
+import 'package:bonedetect/ui/auth_screen/sign_up_screen/ui/widgets/already_have_account.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  void _onSignUp(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    context.read<SignUpCubit>().signUp();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SignUpCubit(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: ColorPalette.backgroundGradient,
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: BlocConsumer<SignUpCubit, SignUpState>(
+                listener: (context, state) {
+                  if (state is SignUpSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("✅ Account created successfully"),
+                      ),
+                    );
+                  } else if (state is SignUpError) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
+                  }
+                },
+                builder: (context, state) {
+                  final cubit = context.read<SignUpCubit>();
+                  final isLoading = state is SignUpLoading;
+                  return LoginBottomContainer(
+                    title: "Create Account",
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          AppTextField(
+                            controller: cubit.nameController,
+                            labelText: "Full Name",
+                            textInputAction: TextInputAction.next,
+                            validator: ValidationData.validateName,
+                          ),
+                          verticalSpace(16),
+                          AppTextField(
+                            controller: cubit.emailController,
+                            labelText: "Email",
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            validator: ValidationData.validateEmail,
+                          ),
+                          verticalSpace(16),
+                          AppTextField(
+                            controller: cubit.passwordController,
+                            labelText: "Password",
+                            isPassword: true,
+                            textInputAction: TextInputAction.done,
+                            validator: ValidationData.validatePassword,
+                          ),
+                          verticalSpace(18),
+                          AppButton(
+                            title: "Sign Up",
+                            onPressed: () => _onSignUp(context),
+                            isLoading: isLoading,
+                          ),
+                          verticalSpace(15),
+                          AlreadyHaveAccount(
+                            onTap: () => Navigator.pushReplacementNamed(context, RouteNames.loginScreen),
+
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
