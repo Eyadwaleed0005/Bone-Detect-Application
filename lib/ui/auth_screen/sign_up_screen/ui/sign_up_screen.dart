@@ -44,10 +44,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: BlocConsumer<SignUpCubit, SignUpState>(
                 listener: (context, state) {
                   if (state is SignUpSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("✅ Account created successfully"),
-                      ),
+                     Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      RouteNames.homeScreen,
+                      (route) => false,
                     );
                   } else if (state is SignUpError) {
                     ScaffoldMessenger.of(

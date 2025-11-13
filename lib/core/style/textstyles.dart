@@ -49,6 +49,14 @@ class Textstyles {
       color: ColorPalette.white,
     );
   }
+  static TextStyle font11whiteregular() {
+    return TextStyle(
+      fontSize: 11.sp,
+      fontWeight: FontWeightHelper.regular,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.white,
+    );
+  }
 
   // ===== Blue Text =====
   static TextStyle font22lightBlueextraBold() {
@@ -88,11 +96,45 @@ class Textstyles {
     );
   }
 
+  static TextStyle font20blackBold() {
+    return TextStyle(
+      fontSize: 15.sp,
+      fontWeight: FontWeightHelper.bold,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.black,
+    );
+  }
+
 
   // ===== Gray =====
-    static TextStyle font14grey600medium() {
+    static TextStyle font12grey600medium() {
     return TextStyle(
       fontSize: 12.sp,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.grey600,
+    );
+  }
+    static TextStyle font13grey600medium() {
+    return TextStyle(
+      fontSize: 13.sp,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.grey600,
+    );
+  }
+
+   static TextStyle font14grey600medium() {
+    return TextStyle(
+      fontSize: 14.sp,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.grey600,
+    );
+  }
+    static TextStyle font11grey600medium() {
+    return TextStyle(
+      fontSize: 11.sp,
       fontWeight: FontWeightHelper.medium,
       fontFamily: plusJakartaSans,
       color: ColorPalette.grey600,

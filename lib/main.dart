@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Bone Detect',
           debugShowCheckedModeBanner: false,
-          initialRoute: RouteNames.startScreen,
+          initialRoute: RouteNames.questionScreen,
           onGenerateRoute: AppRoutes.generateRoute,
         );
       },

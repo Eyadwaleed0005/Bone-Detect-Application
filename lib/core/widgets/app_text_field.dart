@@ -68,7 +68,7 @@ class _AppTextFieldState extends State<AppTextField> {
           style: Textstyles.font12blackregular(),
           decoration: InputDecoration(
             labelText: widget.labelText,
-            labelStyle: Textstyles.font14grey600medium(),
+            labelStyle: Textstyles.font12grey600medium(),
             floatingLabelStyle: Textstyles.font10blacksemiBold(),
             filled: true,
             fillColor: ColorPalette.white,

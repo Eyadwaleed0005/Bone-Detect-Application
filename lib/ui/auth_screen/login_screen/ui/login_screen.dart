@@ -44,13 +44,15 @@ class _LoginScreenState extends State<LoginScreen> {
               child: BlocConsumer<LoginScreenCubit, LoginScreenState>(
                 listener: (context, state) {
                   if (state is LoginScreenSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("✅ Login successful")),
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      RouteNames.homeScreen,
+                      (route) => false,
                     );
                   } else if (state is LoginScreenError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
                   }
                 },
                 builder: (context, state) {
@@ -82,11 +84,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           AppButton(
                             title: "Login",
                             onPressed: () => _onLogin(context),
-                            isLoading: isLoading, 
+                            isLoading: isLoading,
                           ),
                           verticalSpace(15),
                           DontHaveAccount(
-                            onTap: () => Navigator.pushReplacementNamed(context, RouteNames.signUp),
+                            onTap: () => Navigator.pushReplacementNamed(
+                              context,
+                              RouteNames.signUp,
+                            ),
                           ),
                         ],
                       ),

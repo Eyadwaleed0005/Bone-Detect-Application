@@ -2,7 +2,7 @@ import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bonedetect/core/style/app_color.dart';
-import 'package:bonedetect/core/widgets/app_loading_indicator.dart'; // ✅ استدعاء اللودينج
+import 'package:bonedetect/core/widgets/app_loading_indicator.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -14,6 +14,8 @@ class AppButton extends StatelessWidget {
     this.backgroundColor,
     this.textStyle,
     this.isLoading = false,
+    this.icon,
+    this.iconSpacing,
   });
 
   final String title;
@@ -23,6 +25,9 @@ class AppButton extends StatelessWidget {
   final Color? backgroundColor;
   final TextStyle? textStyle;
   final bool isLoading;
+
+  final Widget? icon;
+  final double? iconSpacing;
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +47,25 @@ class AppButton extends StatelessWidget {
           transitionBuilder: (child, animation) =>
               FadeTransition(opacity: animation, child: child),
           child: isLoading
-              ? const AppLoadingIndicator(key: ValueKey('loader')) 
-              : Text(
-                  key: const ValueKey('text'),
-                  title,
-                  style: textStyle ?? Textstyles.font16whitebold(),
-                ),
+              ? const AppLoadingIndicator(key: ValueKey('loader'))
+              : (icon == null
+                    ? Text(
+                        key: const ValueKey('text_only'),
+                        title,
+                        style: textStyle ?? Textstyles.font16whitebold(),
+                      )
+                    : Row(
+                        key: const ValueKey('text_with_icon'),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          icon!,
+                          SizedBox(width: iconSpacing ?? 8.w),
+                          Text(
+                            title,
+                            style: textStyle ?? Textstyles.font16whitebold(),
+                          ),
+                        ],
+                      )),
         ),
       ),
     );
