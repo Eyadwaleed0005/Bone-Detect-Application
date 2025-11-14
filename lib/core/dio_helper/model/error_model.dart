@@ -1,39 +1,65 @@
+import 'package:bonedetect/core/dio_helper/model/error_detail.dart';
+import 'package:bonedetect/core/api/api_keys.dart';
+
 class ErrorModel {
-  final String? id;
-  final int? statusCode;
-  final String? message;
-  final List<String>? errors; 
+  final List<ErrorDetail>? details;
+  final String? error;
 
   ErrorModel({
-    this.id,
-    this.statusCode,
-    this.message,
-    this.errors,
+    this.details,
+    this.error,
   });
 
   factory ErrorModel.fromJson(Map<String, dynamic> json) {
-    List<String>? extractedErrors;
+    List<ErrorDetail>? detailObjects;
 
-    if (json.containsKey("erorrs") && json["erorrs"] is Map<String, dynamic>) {
-      final errorsMap = json["erorrs"] as Map<String, dynamic>;
-      if (errorsMap.containsKey("\$values") && errorsMap["\$values"] is List) {
-        extractedErrors = List<String>.from(errorsMap["\$values"]);
-      }
+    final detailJson = json[ApiKeys.detail];
+    if (detailJson is List) {
+      detailObjects = detailJson
+          .whereType<Map<String, dynamic>>()
+          .map((e) => ErrorDetail.fromJson(e))
+          .toList();
+    } else if (detailJson is String) {
+      detailObjects = [
+        ErrorDetail(
+          msg: detailJson.toString(),
+        ),
+      ];
     }
 
+    final errorMessage = json[ApiKeys.error]?.toString();
+
     return ErrorModel(
-      id: json['\$id']?.toString(),
-      statusCode: json['statusCode'] is int ? json['statusCode'] : null,
-      message: json['message']?.toString(),
-      errors: extractedErrors,
+      details: detailObjects,
+      error: errorMessage,
     );
   }
 
+  List<String> get messages {
+    final result = <String>[];
+    if (details != null) {
+      result.addAll(
+        details!
+            .map((e) => e.msg)
+            .whereType<String>()
+            .toList(),
+      );
+    }
+
+    if (error != null && error!.isNotEmpty) {
+      result.add(error!);
+    }
+
+    return result;
+  }
+
+  bool get hasMessages => messages.isNotEmpty;
   @override
   String toString() {
-    if (errors != null && errors!.isNotEmpty) {
-      return errors!.join("\n");
+    final msgs = messages;
+    if (msgs.isNotEmpty) {
+      return msgs.join("\n");
     }
-    return message ?? "حدث خطأ غير معروف";
+    return "Unknown error occurred";
   }
 }

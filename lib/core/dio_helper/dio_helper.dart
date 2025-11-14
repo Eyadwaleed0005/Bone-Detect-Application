@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:bonedetect/core/api/end_points.dart';
+import 'package:bonedetect/core/api/api_keys.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,17 +8,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DioHelper {
   static final Dio dio = Dio();
 
-  static void init({String? baseUrl}) {
-    dio.options.baseUrl = baseUrl ?? "https://api.example.com";
+  static void init() {
+    dio.options.baseUrl = EndPoints.baseUrl;
     dio.options.connectTimeout = const Duration(minutes: 1);
     dio.options.receiveTimeout = const Duration(minutes: 1);
-    dio.options.headers = {"Content-Type": "application/json"};
-    
+    dio.options.headers = {
+      "Content-Type": "application/json",
+    };
+
+    dio.interceptors.clear();
+
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final prefs = await SharedPreferences.getInstance();
-          final token = prefs.getString('token');
+          final token = prefs.getString(ApiKeys.token);
           if (token != null && token.isNotEmpty) {
             options.headers['Token'] = 'Route__$token';
           }
@@ -40,7 +47,10 @@ class DioHelper {
     required String url,
     Map<String, dynamic>? query,
   }) async {
-    return await dio.get(url, queryParameters: query);
+    return await dio.get(
+      url,
+      queryParameters: query,
+    );
   }
 
   static Future<Response> postData({
@@ -48,12 +58,24 @@ class DioHelper {
     dynamic data,
     Map<String, dynamic>? query,
     Map<String, dynamic>? headers,
+    bool isFormData = false,
   }) async {
+    dynamic requestData = data;
+    Map<String, dynamic>? finalHeaders = headers;
+
+    if (isFormData && data is Map<String, dynamic>) {
+      requestData = FormData.fromMap(data);
+      finalHeaders = {
+        ...?headers,
+        'Content-Type': 'multipart/form-data',
+      };
+    }
+
     return await dio.post(
       url,
-      data: data,
+      data: requestData,
       queryParameters: query,
-      options: Options(headers: headers),
+      options: Options(headers: finalHeaders),
     );
   }
 
@@ -67,7 +89,11 @@ class DioHelper {
       url,
       data: isRaw ? data : data,
       queryParameters: query,
-      options: Options(headers: {"Content-Type": "application/json"}),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+        },
+      ),
     );
   }
 
@@ -76,7 +102,11 @@ class DioHelper {
     Map<String, dynamic>? data,
     Map<String, dynamic>? query,
   }) async {
-    return await dio.patch(url, data: data, queryParameters: query);
+    return await dio.patch(
+      url,
+      data: data,
+      queryParameters: query,
+    );
   }
 
   static Future<Response> deleteData({
@@ -84,11 +114,14 @@ class DioHelper {
     Map<String, dynamic>? data,
     Map<String, dynamic>? query,
   }) async {
-    return await dio.delete(url, data: data, queryParameters: query);
+    return await dio.delete(
+      url,
+      data: data,
+      queryParameters: query,
+    );
   }
 
-  /// Upload file or image
-  /*static Future<Response> uploadFile({
+  static Future<Response> uploadFile({
     required String url,
     required File file,
     String fileFieldName = 'file',
@@ -98,7 +131,8 @@ class DioHelper {
     String fileName = file.path.split('/').last;
 
     FormData formData = FormData.fromMap({
-      fileFieldName: await MultipartFile.fromFile(file.path, filename: fileName),
+      fileFieldName:
+          await MultipartFile.fromFile(file.path, filename: fileName),
       ...?data,
     });
 
@@ -112,7 +146,6 @@ class DioHelper {
     );
   }
 
-  /// Upload multiple files
   static Future<Response> uploadMultipleFiles({
     required String url,
     required List<File> files,
@@ -135,7 +168,9 @@ class DioHelper {
       url,
       data: formData,
       queryParameters: query,
-      options: Options(contentType: 'multipart/form-data'),
+      options: Options(
+        contentType: 'multipart/form-data',
+      ),
     );
-  }*/
+  }
 }

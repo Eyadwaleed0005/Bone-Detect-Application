@@ -1,25 +1,23 @@
 import 'package:bonedetect/core/helper/spacer.dart';
 import 'package:bonedetect/core/helper/validation_data.dart';
+import 'package:bonedetect/core/routes/app_images_routes.dart';
 import 'package:bonedetect/core/routes/route_names.dart';
 import 'package:bonedetect/core/style/app_color.dart';
+import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:bonedetect/core/widgets/app_button.dart';
-import 'package:bonedetect/ui/auth_screen/login_screen/logic/cubit/login_screen_cubit.dart';
-import 'package:bonedetect/ui/auth_screen/login_screen/ui/widgets/dont_have_account.dart';
-import 'package:flutter/material.dart';
-import 'widgets/login_bottom_container.dart';
 import 'package:bonedetect/core/widgets/app_text_field.dart';
+import 'package:bonedetect/core/widgets/animation_box.dart';
+import 'package:bonedetect/ui/auth_screen/login_screen/ui/widgets/login_bottom_container.dart';
+import 'package:bonedetect/ui/auth_screen/login_screen/ui/widgets/dont_have_account.dart';
+import 'package:bonedetect/ui/auth_screen/login_screen/logic/cubit/login_screen_cubit.dart';
+import 'package:bonedetect/ui/auth_screen/login_screen/data/repo/login_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-
   void _onLogin(BuildContext context) {
     FocusScope.of(context).unfocus();
     if (!(_formKey.currentState?.validate() ?? false)) return;
@@ -29,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LoginScreenCubit(),
+      create: (_) => LoginScreenCubit(LoginRepository()),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -50,9 +48,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       (route) => false,
                     );
                   } else if (state is LoginScreenError) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(state.message)));
+                    showBlockingAnimation(
+                      context: context,
+                      message: state.message,
+                      animationAsset: AppImage().errorAnimation,
+                      autoClose: true,
+                      duration: const Duration(seconds: 3),
+                      textStyle: Textstyles.font16whitebold(),
+                    );
                   }
                 },
                 builder: (context, state) {

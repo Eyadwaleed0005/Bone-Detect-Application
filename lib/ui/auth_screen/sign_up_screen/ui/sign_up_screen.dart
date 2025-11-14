@@ -1,25 +1,23 @@
 import 'package:bonedetect/core/helper/spacer.dart';
 import 'package:bonedetect/core/helper/validation_data.dart';
+import 'package:bonedetect/core/routes/app_images_routes.dart';
 import 'package:bonedetect/core/routes/route_names.dart';
 import 'package:bonedetect/core/style/app_color.dart';
+import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:bonedetect/core/widgets/app_button.dart';
 import 'package:bonedetect/core/widgets/app_text_field.dart';
 import 'package:bonedetect/ui/auth_screen/login_screen/ui/widgets/login_bottom_container.dart';
+import 'package:bonedetect/ui/auth_screen/sign_up_screen/data/repo/sign_up_repository.dart';
 import 'package:bonedetect/ui/auth_screen/sign_up_screen/logic/sign_up_cubit.dart';
 import 'package:bonedetect/ui/auth_screen/sign_up_screen/ui/widgets/already_have_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bonedetect/core/widgets/animation_box.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
-
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({super.key});
   final _formKey = GlobalKey<FormState>();
-
+  
   void _onSignUp(BuildContext context) {
     FocusScope.of(context).unfocus();
     if (!(_formKey.currentState?.validate() ?? false)) return;
@@ -29,7 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SignUpCubit(),
+      create: (_) => SignUpCubit(SignUpRepository()),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -44,15 +42,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: BlocConsumer<SignUpCubit, SignUpState>(
                 listener: (context, state) {
                   if (state is SignUpSuccess) {
-                     Navigator.pushNamedAndRemoveUntil(
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
                       RouteNames.homeScreen,
                       (route) => false,
                     );
                   } else if (state is SignUpError) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(state.message)));
+                    showBlockingAnimation(
+                      context: context,
+                      message: state.message,
+                      animationAsset: AppImage().errorAnimation,
+                      autoClose: true,
+                      duration: const Duration(seconds: 3),
+                      textStyle: Textstyles.font16whitebold()
+                    );
                   }
                 },
                 builder: (context, state) {
@@ -95,8 +98,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           verticalSpace(15),
                           AlreadyHaveAccount(
-                            onTap: () => Navigator.pushReplacementNamed(context, RouteNames.loginScreen),
-
+                            onTap: () => Navigator.pushReplacementNamed(
+                              context,
+                              RouteNames.loginScreen,
+                            ),
                           ),
                         ],
                       ),

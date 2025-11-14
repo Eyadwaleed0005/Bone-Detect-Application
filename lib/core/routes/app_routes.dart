@@ -15,9 +15,9 @@ class AppRoutes {
       case RouteNames.onBordingScreen:
         return MaterialPageRoute(builder: (_) => const OnBordingScreen());
       case RouteNames.loginScreen:
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
+        return MaterialPageRoute(builder: (_) => LoginScreen());
       case RouteNames.signUp:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
+        return MaterialPageRoute(builder: (_) => SignUpScreen());
       case RouteNames.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case RouteNames.questionScreen:

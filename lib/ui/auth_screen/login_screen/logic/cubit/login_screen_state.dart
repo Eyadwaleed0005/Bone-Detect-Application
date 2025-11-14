@@ -1,14 +1,19 @@
 part of 'login_screen_cubit.dart';
 
-sealed class LoginScreenState {}
+abstract class LoginScreenState {}
 
-final class LoginScreenInitial extends LoginScreenState {}
+class LoginScreenInitial extends LoginScreenState {}
 
-final class LoginScreenLoading extends LoginScreenState {}
+class LoginScreenLoading extends LoginScreenState {}
 
-final class LoginScreenSuccess extends LoginScreenState {}
+class LoginScreenSuccess extends LoginScreenState {
+  final SuccessLoginMessageModel response;
 
-final class LoginScreenError extends LoginScreenState {
+  LoginScreenSuccess(this.response);
+}
+
+class LoginScreenError extends LoginScreenState {
   final String message;
+
   LoginScreenError(this.message);
 }

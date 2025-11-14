@@ -17,20 +17,25 @@ class DioExceptionHandler {
       case DioExceptionType.badResponse:
         {
           final response = error.response;
+
           if (response != null && response.data != null) {
             try {
               if (response.data is Map<String, dynamic>) {
-                final errorModel = ErrorModel.fromJson(response.data);
-                return errorModel.toString();
+                final errorModel =
+                    ErrorModel.fromJson(response.data as Map<String, dynamic>);
+                if (errorModel.hasMessages) {
+                  return errorModel.toString();
+                }
               }
               if (response.data is String) {
-                return response.data;
+                return response.data as String;
               }
             } catch (_) {
               if (response.data is String) {
-                return response.data;
+                return response.data as String;
               }
             }
+
             switch (response.statusCode) {
               case 400:
                 return "Bad request";
@@ -60,7 +65,6 @@ class DioExceptionHandler {
         }
       case DioExceptionType.unknown:
         return "Unexpected error: ${error.message}";
-
       default:
         return "Something went wrong";
     }

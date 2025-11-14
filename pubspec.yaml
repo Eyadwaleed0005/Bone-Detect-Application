@@ -39,6 +39,8 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_bloc: ^9.1.1
   flutter_animate: ^4.5.2
+  dartz: ^0.10.1
+  lottie: ^3.3.2
 
 dev_dependencies:
   flutter_test:

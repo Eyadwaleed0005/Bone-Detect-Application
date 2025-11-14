@@ -1,21 +1,51 @@
 import 'package:bloc/bloc.dart';
+import 'package:bonedetect/core/local/shared_preference_keys.dart';
+import 'package:bonedetect/core/local/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:bonedetect/ui/auth_screen/sign_up_screen/data/repo/sign_up_repository.dart';
+import 'package:bonedetect/ui/auth_screen/sign_up_screen/data/model/sign_up_request_model.dart';
+import 'package:bonedetect/ui/auth_screen/sign_up_screen/data/model/success_register_message_model.dart';
+import 'package:dartz/dartz.dart';
 
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  SignUpCubit() : super(SignUpInitial());
+  SignUpCubit(this._repository) : super(SignUpInitial());
+
+  final SignUpRepository _repository;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   Future<void> signUp() async {
     emit(SignUpLoading());
+    final request = SignUpRequestModel(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
+
     try {
-      await Future.delayed(const Duration(seconds: 2));
-      emit(SignUpSuccess());
+      final Either<String, SuccessRegisterMessageModel> result =
+          await _repository.signUp(request);
+      result.fold(
+        (errorMessage) {
+          emit(SignUpError(errorMessage));
+        },
+        (successResponse) async {
+          await SharedPreferencesHelper.saveString(
+            key: SharedPreferenceKeys.userName,
+            value: request.name,
+          );
+          await SharedPreferencesHelper.saveString(
+            key: SharedPreferenceKeys.token,
+            value: successResponse.token,
+          );
+          emit(SignUpSuccess(successResponse));
+        },
+      );
     } catch (e) {
-      emit(SignUpError('Failed to create account, please try again.'));
+      emit(SignUpError(e.toString()));
     }
   }
 
