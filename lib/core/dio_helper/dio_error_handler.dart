@@ -14,6 +14,7 @@ class DioExceptionHandler {
         return "Receive timeout";
       case DioExceptionType.connectionError:
         return "Connection error";
+
       case DioExceptionType.badResponse:
         {
           final response = error.response;
@@ -36,6 +37,7 @@ class DioExceptionHandler {
               }
             }
 
+            // Fallback على status code لو مفيش رسالة مفهومة
             switch (response.statusCode) {
               case 400:
                 return "Bad request";
@@ -61,10 +63,13 @@ class DioExceptionHandler {
                 return "Unknown error";
             }
           }
+
           return "Bad response error: ${error.message}";
         }
+
       case DioExceptionType.unknown:
         return "Unexpected error: ${error.message}";
+
       default:
         return "Something went wrong";
     }
