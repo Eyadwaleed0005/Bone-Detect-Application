@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:bonedetect/core/local/secure_storage.dart';
+import 'package:bonedetect/core/local/secure_storage_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:dartz/dartz.dart';
 import 'package:bonedetect/core/local/shared_preference_keys.dart';
@@ -37,8 +39,8 @@ class LoginScreenCubit extends Cubit<LoginScreenState> {
             value: successResponse.name,
           );
 
-          await SharedPreferencesHelper.saveString(
-            key: SharedPreferenceKeys.token,
+          await SecureStorageHelper.savedata(
+            key: SecureStorageKeys.token,
             value: successResponse.token,
           );
 

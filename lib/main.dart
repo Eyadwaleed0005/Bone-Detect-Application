@@ -14,7 +14,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Bone Detect',
           debugShowCheckedModeBanner: false,
-          initialRoute: RouteNames.signUp,
+          initialRoute: RouteNames.splashScreen,
           onGenerateRoute: AppRoutes.generateRoute,
         );
       },

@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:bonedetect/core/local/secure_storage.dart';
+import 'package:bonedetect/core/local/secure_storage_keys.dart';
 import 'package:bonedetect/core/local/shared_preference_keys.dart';
 import 'package:bonedetect/core/local/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +39,8 @@ class SignUpCubit extends Cubit<SignUpState> {
             key: SharedPreferenceKeys.userName,
             value: request.name,
           );
-          await SharedPreferencesHelper.saveString(
-            key: SharedPreferenceKeys.token,
+         await SecureStorageHelper.savedata(
+            key: SecureStorageKeys.token,
             value: successResponse.token,
           );
           emit(SignUpSuccess(successResponse));

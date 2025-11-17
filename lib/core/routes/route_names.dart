@@ -5,4 +5,5 @@ class RouteNames {
   static const String signUp = '/signUp';
   static const String homeScreen = '/homeScreen';
   static const String questionScreen = '/questionScreen';
+  static const String splashScreen = '/splashScreen';
 }
