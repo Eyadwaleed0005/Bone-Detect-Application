@@ -11,18 +11,21 @@ class AppRadioTile<T> extends StatelessWidget {
     required this.groupValue,
     required this.onChanged,
     required this.title,
+    this.error = false,
   });
 
   final T value;
   final T? groupValue;
   final ValueChanged<T?> onChanged;
   final String title;
+  final bool error;
+
   bool get _isSelected => value == groupValue;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h), 
+      margin: EdgeInsets.only(bottom: 12.h),
       child: InkWell(
         borderRadius: BorderRadius.circular(12.r),
         onTap: () => onChanged(value),
@@ -33,7 +36,9 @@ class AppRadioTile<T> extends StatelessWidget {
             border: Border.all(
               color: _isSelected
                   ? ColorPalette.lightBlue
-                  : ColorPalette.grey300,
+                  : error
+                      ? Colors.red
+                      : ColorPalette.grey300,
               width: 1,
             ),
             color: _isSelected
@@ -50,7 +55,9 @@ class AppRadioTile<T> extends StatelessWidget {
                   border: Border.all(
                     color: _isSelected
                         ? ColorPalette.lightBlue
-                        : ColorPalette.grey400,
+                        : error
+                            ? Colors.red
+                            : ColorPalette.grey400,
                     width: 2.w,
                   ),
                 ),
@@ -65,7 +72,7 @@ class AppRadioTile<T> extends StatelessWidget {
                   ),
                 ),
               ),
-              horizontalSpace(16), 
+              horizontalSpace(16),
               Expanded(
                 child: Text(
                   title,

@@ -1,6 +1,8 @@
 import 'package:bonedetect/core/helper/spacer.dart';
+import 'package:bonedetect/core/routes/route_names.dart';
 import 'package:bonedetect/core/style/app_color.dart';
 import 'package:bonedetect/core/widgets/app_button.dart';
+import 'package:bonedetect/core/widgets/custom_back_button.dart';
 import 'package:bonedetect/ui/question_screen/logic/cubit/question_screen_cubit.dart';
 import 'package:bonedetect/ui/question_screen/ui/widgets/question_card.dart';
 import 'package:bonedetect/ui/question_screen/ui/widgets/questions_dots_indicator.dart';
@@ -19,11 +21,17 @@ class QuestionScreen extends StatelessWidget {
       child: BlocConsumer<QuestionScreenCubit, QuestionScreenState>(
         listener: (context, state) {
           if (state is QuestionScreenCompleted) {
-            debugPrint("Answers: ${state.answers}");
+            Navigator.pushReplacementNamed(
+              context,
+              RouteNames.resultScreen,
+            );
           }
         },
         builder: (context, state) {
           final cubit = context.read<QuestionScreenCubit>();
+          final int? errorIndex =
+              state is QuestionScreenValidationError ? state.questionIndex : null;
+
           return Scaffold(
             body: Stack(
               children: [
@@ -34,7 +42,7 @@ class QuestionScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        verticalSpace(75),
+                        verticalSpace(80),
                         Expanded(
                           child: PageView.builder(
                             controller: cubit.pageController,
@@ -47,6 +55,7 @@ class QuestionScreen extends StatelessWidget {
                                 selectedAnswer: cubit.selectedAnswers[index],
                                 onChanged: (value) =>
                                     cubit.selectAnswer(index, value),
+                                hasError: errorIndex == index,
                               );
                             },
                           ),
@@ -69,6 +78,7 @@ class QuestionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const CustomBackButton(),
               ],
             ),
           );

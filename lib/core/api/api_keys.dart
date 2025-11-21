@@ -9,4 +9,6 @@ class ApiKeys {
   static const String msg = "msg";
   static const String type = "type";
   static const String token = "token";
+  static const String fractureProbability = "fracture_probability";
+  static const String classification = "classification ";
 }

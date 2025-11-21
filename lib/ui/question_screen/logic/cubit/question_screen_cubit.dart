@@ -8,34 +8,69 @@ part 'question_screen_state.dart';
 
 class QuestionScreenCubit extends Cubit<QuestionScreenState> {
   QuestionScreenCubit() : super(QuestionScreenInitial()) {
-    _init();
+    questions.addAll(QuestionsData.questions);
+    selectedAnswers.addAll(List<String?>.filled(questions.length, null));
   }
-  final List<QuestionModel> questions = QuestionsData.questions;
+
   final PageController pageController = PageController();
+
+  final List<QuestionModel> questions = [];
+  final List<String?> selectedAnswers = [];
+
   int currentPage = 0;
-  late List<String?> selectedAnswers;
+
   bool get isLastPage => currentPage == questions.length - 1;
-  void _init() {
-    selectedAnswers = List<String?>.filled(questions.length, null);
+
+  void onPageChanged(int newIndex) {
+    if (newIndex > currentPage && selectedAnswers[currentPage] == null) {
+      emit(QuestionScreenValidationError(currentPage));
+      pageController.animateToPage(
+        currentPage,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+      return;
+    }
+    currentPage = newIndex;
+    emit(QuestionScreenInitial());
   }
+
   void selectAnswer(int index, String? value) {
     selectedAnswers[index] = value;
-    emit(QuestionScreenUpdated());
+    emit(QuestionScreenInitial());
   }
-  void onPageChanged(int index) {
-    currentPage = index;
-    emit(QuestionScreenUpdated());
-  }
-  void onNext() {
-    if (selectedAnswers[currentPage] == null) return;
 
-    if (isLastPage) {
-      emit(QuestionScreenCompleted(selectedAnswers));
-    } else {
-      pageController.nextPage(
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeInOut,
-      );
-    }
+  void onNext() {
+  if (selectedAnswers[currentPage] == null) {
+    emit(QuestionScreenValidationError(currentPage));
+    return;
   }
+
+  if (!isLastPage) {
+    currentPage++;
+    pageController.animateToPage(
+      currentPage,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    emit(QuestionScreenInitial());
+    return;
+  }
+
+  final firstUnansweredIndex =
+      selectedAnswers.indexWhere((answer) => answer == null);
+
+  if (firstUnansweredIndex != -1) {
+    currentPage = firstUnansweredIndex;
+    pageController.animateToPage(
+      firstUnansweredIndex,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    emit(QuestionScreenValidationError(firstUnansweredIndex));
+    return;
+  }
+  emit(QuestionScreenCompleted(List<String?>.from(selectedAnswers)));
+}
+
 }

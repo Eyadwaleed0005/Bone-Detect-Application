@@ -96,7 +96,7 @@ class Textstyles {
     );
   }
 
-  static TextStyle font20blackBold() {
+  static TextStyle font15blackBold() {
     return TextStyle(
       fontSize: 15.sp,
       fontWeight: FontWeightHelper.bold,

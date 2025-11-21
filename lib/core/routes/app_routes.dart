@@ -3,6 +3,7 @@ import 'package:bonedetect/ui/home_screen/ui/home_screen.dart';
 import 'package:bonedetect/ui/on_bording_screen/ui/on_bording_screen.dart';
 import 'package:bonedetect/ui/auth_screen/sign_up_screen/ui/sign_up_screen.dart';
 import 'package:bonedetect/ui/question_screen/ui/question_screen.dart';
+import 'package:bonedetect/ui/result_screen/ui/result_screen.dart';
 import 'package:bonedetect/ui/splash_screen/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bonedetect/ui/start_screen/ui/start_screen.dart';
@@ -31,9 +32,10 @@ class AppRoutes {
 
       case RouteNames.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-    }
 
-    // No default case ✔
+       case RouteNames.resultScreen:
+        return MaterialPageRoute(builder: (_) => const ResultScreen());
+    }
     return null;
   }
 }
