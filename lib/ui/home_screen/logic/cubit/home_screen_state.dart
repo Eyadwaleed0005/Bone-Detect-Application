@@ -29,3 +29,6 @@ final class HomeScreenPredictionError extends HomeScreenState {
   final String message;
   HomeScreenPredictionError(this.message);
 }
+
+class HomeScreenLogoutSuccess extends HomeScreenState {}
+

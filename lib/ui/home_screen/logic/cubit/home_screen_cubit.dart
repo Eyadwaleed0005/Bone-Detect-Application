@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:bonedetect/core/local/secure_storage.dart';
+import 'package:bonedetect/core/local/secure_storage_keys.dart';
 import 'package:bonedetect/core/local/shared_preference_keys.dart';
 import 'package:bonedetect/core/local/shared_preferences.dart';
 import 'package:bonedetect/ui/home_screen/data/model/fracture_result_model.dart';
@@ -72,6 +74,12 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       emit(HomeScreenPredictionSuccess(model));
     },
   );
+}
+
+Future<void> logout() async {
+  await SharedPreferencesHelper.removeData(key: SharedPreferenceKeys.userName);
+  await SecureStorageHelper.delete(SecureStorageKeys.token);
+  emit(HomeScreenLogoutSuccess());
 }
 
 }

@@ -59,20 +59,31 @@ class HomeScreen extends StatelessWidget {
                   textStyle: Textstyles.font16whitebold(),
                 );
               }
+              if (state is HomeScreenLogoutSuccess) {
+                Navigator.pushNamedAndRemoveUntil(
+                  innerContext,
+                  RouteNames.loginScreen,
+                  (route) => false,
+                );
+              }
             },
             child: Scaffold(
               body: BlocBuilder<HomeScreenCubit, HomeScreenState>(
                 builder: (innerContext, state) {
                   final cubit = innerContext.read<HomeScreenCubit>();
                   final userName = cubit.userName;
-
                   return Stack(
                     children: [
                       Container(color: ColorPalette.white),
-                      HomeHeader(userName: userName),
+                      HomeHeader(
+                        userName: userName,
+                        onLogout: () {
+                          innerContext.read<HomeScreenCubit>().logout();
+                        },
+                      ),
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          padding: EdgeInsets.symmetric(horizontal: 18.w),
                           child: SingleChildScrollView(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,

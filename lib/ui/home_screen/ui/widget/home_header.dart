@@ -6,8 +6,39 @@ import 'package:bonedetect/core/helper/spacer.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key, required this.userName});
+  const HomeHeader({super.key, required this.userName, required this.onLogout});
   final String userName;
+  final VoidCallback onLogout;
+
+  void showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: ColorPalette.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.r),
+        ),
+        title: Text("Logout", style: Textstyles.font15blackBold()),
+        content: Text(
+          "Are you sure you want to logout?",
+          style: Textstyles.font13grey600medium(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel", style: Textstyles.font14grey600medium()),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onLogout();
+            },
+            child: Text("Logout", style: Textstyles.font14errorRedmedium()),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,29 +53,52 @@ class HomeHeader extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 35.h),
         child:
             Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                          Icons.medical_information_outlined,
-                          color: ColorPalette.white,
-                          size: 22.sp,
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.medical_information_outlined,
+                              color: ColorPalette.white,
+                              size: 22.sp,
+                            ),
+                            horizontalSpace(8),
+                            Text(
+                              'Hello, $userName',
+                              style: Textstyles.font16whitebold(),
+                            ),
+                          ],
                         ),
-                        horizontalSpace(8),
-                        Text(
-                          'Hello, $userName',
-                          style: Textstyles.font16whitebold(),
+                        GestureDetector(
+                          onTap: () => showLogoutDialog(context),
+                          child: Container(
+                            padding: EdgeInsets.all(6.r),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.logout_rounded,
+                              color: ColorPalette.white,
+                              size: 20.sp,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    verticalSpace(6),
-                    Text(
-                      'Upload your X-ray image to start analysis',
-                      style: Textstyles.font11whiteregular(),
+                    verticalSpace(12),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Text(
+                        'Upload your X-ray image to start analysis',
+                        style: Textstyles.font11whiteregular(),
+                      ),
                     ),
                   ],
                 )
