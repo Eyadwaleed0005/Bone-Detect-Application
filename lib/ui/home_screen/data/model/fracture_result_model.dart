@@ -1,20 +1,33 @@
 import 'package:bonedetect/core/api/api_keys.dart';
 
 class FractureResultModel {
-  final double fractureProbability;
+  final bool isFractured;
+  final double confidence;
+  final String visionSummary;
 
-  FractureResultModel({required this.fractureProbability});
+  FractureResultModel({
+    required this.isFractured,
+    required this.confidence,
+    required this.visionSummary,
+  });
 
   factory FractureResultModel.fromJson(Map<String, dynamic> json) {
+    final fractureModel = json[ApiKeys.fractureModel] ?? {};
+
     return FractureResultModel(
-      fractureProbability:
-          (json[ApiKeys.fractureProbability] ?? 0.0).toDouble(),
+      isFractured: fractureModel[ApiKeys.isFractured] ?? false,
+      confidence: (fractureModel[ApiKeys.confidence] ?? 0.0).toDouble(),
+      visionSummary: json[ApiKeys.visionSummary] ?? "",
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      ApiKeys.fractureProbability: fractureProbability,
+      ApiKeys.fractureModel: {
+        ApiKeys.isFractured: isFractured,
+        ApiKeys.confidence: confidence,
+      },
+      ApiKeys.visionSummary: visionSummary,
     };
   }
 }

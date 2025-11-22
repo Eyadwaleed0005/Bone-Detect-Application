@@ -20,8 +20,9 @@ final class HomeScreenShowPreview extends HomeScreenState {
 final class HomeScreenPredictionLoading extends HomeScreenState {}
 
 final class HomeScreenPredictionSuccess extends HomeScreenState {
-  final double fractureProbability;
-  HomeScreenPredictionSuccess(this.fractureProbability);
+  final FractureResultModel result;
+
+  HomeScreenPredictionSuccess(this.result);
 }
 
 final class HomeScreenPredictionError extends HomeScreenState {

@@ -43,22 +43,35 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   }
 
   Future<void> sendImageForPrediction(File imageFile) async {
-    _lastImageFile = imageFile;
-    emit(HomeScreenPredictionLoading());
+  _lastImageFile = imageFile;
+  emit(HomeScreenPredictionLoading());
 
-    final result = await _repo.predictFracture(imageFile: imageFile);
+  final result = await _repo.predictFracture(imageFile: imageFile);
 
-    result.fold(
-      (errorMessage) {
-        emit(HomeScreenPredictionError(errorMessage));
-      },
-      (FractureResultModel model) async {
-        await SharedPreferencesHelper.saveDouble(
-          key: SharedPreferenceKeys.fractureProbability,
-          value: model.fractureProbability,
-        );
-        emit(HomeScreenPredictionSuccess(model.fractureProbability));
-      },
-    );
-  }
+  result.fold(
+    (errorMessage) {
+      emit(HomeScreenPredictionError(errorMessage));
+    },
+    (FractureResultModel model) async {
+
+      await SharedPreferencesHelper.saveBool(
+        key: SharedPreferenceKeys.isFractured,
+        value: model.isFractured,
+      );
+
+      await SharedPreferencesHelper.saveDouble(
+        key: SharedPreferenceKeys.confidence,
+        value: model.confidence,
+      );
+
+      await SharedPreferencesHelper.saveString(
+        key: SharedPreferenceKeys.visionSummary,
+        value: model.visionSummary,
+      );
+
+      emit(HomeScreenPredictionSuccess(model));
+    },
+  );
+}
+
 }

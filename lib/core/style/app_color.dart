@@ -23,6 +23,9 @@ class ColorPalette {
   // Error Text
   static const Color errorRed = Color(0xFFD32F2F);
 
+  // Sucess Green Text
+  static const Color green = Color(0xFF4CAF50);  
+
   // Gradient Background
   static const LinearGradient backgroundGradient = LinearGradient(
     colors: [lightBlue, darkBlue],

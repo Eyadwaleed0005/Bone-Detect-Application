@@ -1,121 +1,158 @@
+import 'package:bonedetect/core/routes/app_images_routes.dart';
 import 'package:bonedetect/core/style/app_color.dart';
 import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:bonedetect/core/widgets/app_button.dart';
 import 'package:bonedetect/core/helper/spacer.dart';
-import 'package:bonedetect/core/local/shared_preferences.dart';
-import 'package:bonedetect/core/local/shared_preference_keys.dart';
+import 'package:bonedetect/core/widgets/app_loading_indicator.dart';
+import 'package:bonedetect/ui/result_screen/logic/cubit/result_screen_cubit.dart';
+import 'package:bonedetect/ui/result_screen/ui/widgets/emergency_video_card.dart';
+import 'package:bonedetect/ui/result_screen/ui/widgets/fractured_paragraph.dart';
+import 'package:bonedetect/ui/result_screen/ui/widgets/not_fractured_paragraph.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ResultScreen extends StatefulWidget {
+class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
 
-  @override
-  State<ResultScreen> createState() => _ResultScreenState();
-}
-
-class _ResultScreenState extends State<ResultScreen> {
-  double? probability;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadProbability();
+  String _getResultTitle(bool isFractured) {
+    return isFractured ? "Fracture Detected" : "No Fracture Detected";
   }
 
-  Future<void> _loadProbability() async {
-    final value = await SharedPreferencesHelper.getDouble(
-      key: SharedPreferenceKeys.fractureProbability,
-    );
-
-    setState(() {
-      probability = value;
-      _isLoading = false;
-    });
+  Color _getResultColor(bool isFractured) {
+    return isFractured ? ColorPalette.errorRed : ColorPalette.green;
   }
 
-  /// هل يوجد كسر بناءً على threshold الحقيقي من كاجل؟
-  bool get _isFractured {
-    if (probability == null) return false;
-    return probability! >= 0.5;
-  }
-
-  String getResultTitle() {
-    if (probability == null) {
-      return "Analysis Failed";
-    }
-
-    return _isFractured ? "Fracture Detected" : "No Fracture Detected";
-  }
-
-  Color getResultColor() {
-    if (probability == null) return Colors.grey;
-    return _isFractured ? Colors.red : Colors.green;
-  }
-
-  String getResultParagraph() {
-    if (probability == null) {
-      return "Unable to analyse the image. Please try again with a clear X-ray image.";
-    }
-
-    if (_isFractured) {
-      return "The AI analysis indicates a high probability of a bone fracture in the uploaded X-ray image.\n\n"
-          "This is not a final medical diagnosis, but it is strongly recommended to consult a medical specialist "
-          "to confirm the fracture and start appropriate treatment.";
-    } else {
-      return "The AI analysis does not detect any bone fracture in this image.\n\n"
-          "If this is not a real X-ray image (for example, a normal camera photo), the model will also classify it "
-          "as 'not fractured'. Please ensure you upload a proper X-ray image for accurate results.\n\n"
-          "If you still feel pain or symptoms, it is advised to consult a medical specialist.";
-    }
-  }
-
-  String getPercentageText() {
-    if (probability == null) return "";
-    final percent = (probability! * 100).toStringAsFixed(2);
-    return "$percent% fracture probability";
+  IconData _getResultIcon(bool isFractured) {
+    return isFractured
+        ? Icons.warning_amber_rounded
+        : Icons.check_circle_rounded;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorPalette.white,
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    verticalSpace(40),
-                    Text(
-                      getResultTitle(),
-                      style: Textstyles.font15blackBold().copyWith(
-                        color: getResultColor(),
-                      ),
+    return BlocProvider(
+      create: (_) => ResultScreenCubit()..loadPrediction(),
+      child: Scaffold(
+        backgroundColor: ColorPalette.white,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: BlocBuilder<ResultScreenCubit, ResultScreenState>(
+              builder: (context, state) {
+                if (state is ResultScreenInitial) {
+                  return const Center(child: AppLoadingIndicator());
+                }
+
+                if (state is ResultScreenLoaded) {
+                  final title = _getResultTitle(state.isFractured);
+                  final color = _getResultColor(state.isFractured);
+                  final icon = _getResultIcon(state.isFractured);
+
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        verticalSpace(25),
+                        Row(
+                          children: [
+                            Icon(icon, color: color, size: 30),
+                            SizedBox(width: 10.w),
+                            Text(
+                              title,
+                              style: Textstyles.font15blackBold().copyWith(
+                                color: color,
+                              ),
+                            ),
+                          ],
+                        ),
+                        verticalSpace(20),
+                        state.isFractured
+                            ? const FracturedParagraph()
+                            : const NotFracturedParagraph(),
+                        if (state.isFractured) ...[
+                          verticalSpace(24),
+                          Text(
+                            "Emergency guidance videos",
+                            style: Textstyles.font15blackBold(),
+                          ),
+                          verticalSpace(12),
+                          EmergencyVideoCard(
+                            title:
+                                "How to treat a fracture – basic first aid steps",
+                            description:
+                                "Essential first-aid actions when a fracture is suspected.",
+                            imageAsset: AppImage().tmpPic1,
+                            youtubeUrl:
+                                "https://www.youtube.com/watch?v=2v8vlXgGXwE",
+                          ),
+                          EmergencyVideoCard(
+                            title: "First aid for broken bones",
+                            description:
+                                "Learn how to immobilize broken bones safely.",
+                            imageAsset: AppImage().tmpPic2,
+                            youtubeUrl:
+                                "https://www.youtube.com/watch?v=CP-vb0xxzFM",
+                          ),
+                          EmergencyVideoCard(
+                            title: "Fracture help – step-by-step",
+                            description:
+                                "How to support an injured area until reaching care.",
+                            imageAsset: AppImage().tmpPic3,
+                            youtubeUrl:
+                                "https://www.youtube.com/watch?v=gL2iE0wYm8w",
+                          ),
+                        ],
+                        if (!state.isFractured) ...[
+                          verticalSpace(24),
+                          Text(
+                            "Bone Strengthening Videos",
+                            style: Textstyles.font15blackBold(),
+                          ),
+                          verticalSpace(12),
+                          EmergencyVideoCard(
+                            title: "Top foods to strengthen your bones",
+                            description:
+                                "Learn which foods naturally boost bone density.",
+                            imageAsset: AppImage().tmpPic4,
+                            youtubeUrl:
+                                "https://www.youtube.com/watch?v=zP7wnkGdb5I",
+                          ),
+                          EmergencyVideoCard(
+                            title: "Exercises to improve bone health",
+                            description:
+                                "Daily exercises that help keep your bones strong.",
+                            imageAsset: AppImage().tmpPic5,
+                            youtubeUrl:
+                                "https://www.youtube.com/watch?v=fyQJv1EK5n8",
+                          ),
+                          EmergencyVideoCard(
+                            title: "Vitamin D & calcium explained",
+                            description:
+                                "The best ways to naturally increase vitamin D and calcium.",
+                            imageAsset: AppImage().tmpPic6,
+                            youtubeUrl:
+                                "https://www.youtube.com/watch?v=K7rHGz2XaAg",
+                          ),
+                        ],
+                        verticalSpace(30),
+                        AppButton(
+                          title: "Back",
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        verticalSpace(20),
+                      ],
                     ),
-                    verticalSpace(8),
-                    Text(
-                      getPercentageText(),
-                      style: Textstyles.font13grey600medium(),
-                    ),
-                    verticalSpace(20),
-                    Text(
-                      getResultParagraph(),
-                      style: Textstyles.font14grey600medium(),
-                    ),
-                    const Spacer(),
-                    AppButton(
-                      title: "Back",
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    verticalSpace(20),
-                  ],
-                ),
-              ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
             ),
+          ),
+        ),
+      ),
     );
   }
 }

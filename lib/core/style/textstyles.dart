@@ -150,4 +150,13 @@ class Textstyles {
       color: ColorPalette.errorRed,
     );
   }
+
+   static TextStyle font14errorRedmedium() {
+    return TextStyle(
+      fontSize: 14.sp,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.errorRed,
+    );
+  }
 }

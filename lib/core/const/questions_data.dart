@@ -3,16 +3,20 @@ import 'package:bonedetect/ui/question_screen/data/model/question_model.dart';
 class QuestionsData {
   static const List<QuestionModel> questions = [
     QuestionModel(
-      question: "What is your preferred X-ray type?",
-      options: ["Chest X-ray", "Hand X-ray", "Leg X-ray", "Other"],
+      question: "What type of X-ray are you uploading?",
+      options: ["Chest", "Hand", "Leg", "Other"],
     ),
     QuestionModel(
-      question: "Have you experienced pain recently?",
-      options: ["Yes, often", "Sometimes", "Rarely", "No pain"],
+      question: "Have you experienced pain in the injured area?",
+      options: ["Severe pain", "Moderate pain", "Mild pain", "No pain"],
     ),
     QuestionModel(
-      question: "How would you describe the injury severity?",
-      options: ["Mild", "Moderate", "Severe", "Not sure"],
+      question: "Is there any visible swelling?",
+      options: ["Yes, large swelling", "Slight swelling", "No swelling", "Not sure"],
+    ),
+    QuestionModel(
+      question: "Can you move the injured part normally?",
+      options: ["Yes, fully", "Partially", "Barely", "Not at all"],
     ),
   ];
 }
