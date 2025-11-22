@@ -48,13 +48,12 @@ class ResultScreen extends StatelessWidget {
                   final title = _getResultTitle(state.isFractured);
                   final color = _getResultColor(state.isFractured);
                   final icon = _getResultIcon(state.isFractured);
-
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        verticalSpace(25),
+                        verticalSpace(18),
                         Row(
                           children: [
                             Icon(icon, color: color, size: 30),
@@ -111,29 +110,32 @@ class ResultScreen extends StatelessWidget {
                             style: Textstyles.font15blackBold(),
                           ),
                           verticalSpace(12),
+
                           EmergencyVideoCard(
                             title: "Top foods to strengthen your bones",
                             description:
                                 "Learn which foods naturally boost bone density.",
                             imageAsset: AppImage().tmpPic4,
                             youtubeUrl:
-                                "https://www.youtube.com/watch?v=zP7wnkGdb5I",
+                                "https://www.youtube.com/watch?v=uu3wVnKekAs",
                           ),
+
                           EmergencyVideoCard(
                             title: "Exercises to improve bone health",
                             description:
                                 "Daily exercises that help keep your bones strong.",
                             imageAsset: AppImage().tmpPic5,
                             youtubeUrl:
-                                "https://www.youtube.com/watch?v=fyQJv1EK5n8",
+                                "https://www.youtube.com/watch?v=y3DevSspTqw",
                           ),
+
                           EmergencyVideoCard(
                             title: "Vitamin D & calcium explained",
                             description:
                                 "The best ways to naturally increase vitamin D and calcium.",
                             imageAsset: AppImage().tmpPic6,
                             youtubeUrl:
-                                "https://www.youtube.com/watch?v=K7rHGz2XaAg",
+                                "https://www.youtube.com/watch?v=DnTyX4HGWZ8",
                           ),
                         ],
                         verticalSpace(30),
@@ -146,7 +148,6 @@ class ResultScreen extends StatelessWidget {
                     ),
                   );
                 }
-
                 return const SizedBox.shrink();
               },
             ),

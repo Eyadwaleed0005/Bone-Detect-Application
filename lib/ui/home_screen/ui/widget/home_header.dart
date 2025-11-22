@@ -53,7 +53,7 @@ class HomeHeader extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 35.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 23.h),
         child:
             Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

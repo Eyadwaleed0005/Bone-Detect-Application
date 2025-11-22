@@ -74,6 +74,11 @@ flutter_native_splash:
   android_gravity: center
   ios_content_mode: scaleAspectFill
 
+  android_12:
+    image: assets/images/logo.png
+    icon_background_color: "#225B9F"
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
