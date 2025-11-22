@@ -70,7 +70,7 @@ class HomeHeader extends StatelessWidget {
                             ),
                             horizontalSpace(8),
                             Text(
-                              'Hello, $userName',
+                              'Hello, ${userName.split(" ").first}',
                               style: Textstyles.font16whitebold(),
                             ),
                           ],
