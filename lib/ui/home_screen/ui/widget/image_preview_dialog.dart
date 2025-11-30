@@ -8,6 +8,7 @@ import 'package:bonedetect/ui/home_screen/logic/cubit/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ImagePreviewDialog extends StatelessWidget {
   final File imageFile;
@@ -33,17 +34,15 @@ class ImagePreviewDialog extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
           builder: (context, state) {
-            final bool isLoading =
-                state is HomeScreenPredictionLoading;
+            final bool isLoading = state is HomeScreenPredictionLoading;
+
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Align(
                   alignment: Alignment.topRight,
                   child: InkWell(
-                    onTap: isLoading
-                        ? null
-                        : () => Navigator.of(context).pop(),
+                    onTap: isLoading ? null : () => Navigator.of(context).pop(),
                     child: Container(
                       width: 32.w,
                       height: 32.w,
@@ -61,7 +60,9 @@ class ImagePreviewDialog extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 verticalSpace(12),
+
                 ClipRRect(
                   borderRadius: BorderRadius.circular(14.r),
                   child: Image.file(
@@ -71,17 +72,20 @@ class ImagePreviewDialog extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
+
                 verticalSpace(18),
+
                 SizedBox(
                   width: 160.w,
                   child: AppButton(
-                    title: 'Send',
+                    title: 'send'.tr(),
                     isLoading: isLoading,
                     onPressed: () {
                       onSend();
                     },
                   ),
                 ),
+
                 verticalSpace(10),
               ],
             );

@@ -1,22 +1,43 @@
 import 'package:bonedetect/ui/question_screen/data/model/question_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class QuestionsData {
-  static const List<QuestionModel> questions = [
+  static List<QuestionModel> questions = [
     QuestionModel(
-      question: "What type of X-ray are you uploading?",
-      options: ["Chest", "Hand", "Leg", "Other"],
+      question: "question_1".tr(),
+      options: [
+        "question_1_opt1".tr(),
+        "question_1_opt2".tr(),
+        "question_1_opt3".tr(),
+        "question_1_opt4".tr(),
+      ],
     ),
     QuestionModel(
-      question: "Have you experienced pain in the injured area?",
-      options: ["Severe pain", "Moderate pain", "Mild pain", "No pain"],
+      question: "question_2".tr(),
+      options: [
+        "question_2_opt1".tr(),
+        "question_2_opt2".tr(),
+        "question_2_opt3".tr(),
+        "question_2_opt4".tr(),
+      ],
     ),
     QuestionModel(
-      question: "Is there any visible swelling?",
-      options: ["Yes, large swelling", "Slight swelling", "No swelling", "Not sure"],
+      question: "question_3".tr(),
+      options: [
+        "question_3_opt1".tr(),
+        "question_3_opt2".tr(),
+        "question_3_opt3".tr(),
+        "question_3_opt4".tr(),
+      ],
     ),
     QuestionModel(
-      question: "Can you move the injured part normally?",
-      options: ["Yes, fully", "Partially", "Barely", "Not at all"],
+      question: "question_4".tr(),
+      options: [
+        "question_4_opt1".tr(),
+        "question_4_opt2".tr(),
+        "question_4_opt3".tr(),
+        "question_4_opt4".tr(),
+      ],
     ),
   ];
 }

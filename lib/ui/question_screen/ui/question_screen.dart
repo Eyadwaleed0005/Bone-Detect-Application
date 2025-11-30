@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class QuestionScreen extends StatelessWidget {
   const QuestionScreen({super.key});
@@ -60,19 +61,26 @@ class QuestionScreen extends StatelessWidget {
                             },
                           ),
                         ),
+
                         verticalSpace(16),
+
                         QuestionsDotsIndicator(
                           length: cubit.questions.length,
                           currentIndex: cubit.currentPage,
                         ),
+
                         verticalSpace(20),
+
                         AppButton(
-                          title: cubit.isLastPage ? 'Result' : 'Next',
+                          title: cubit.isLastPage
+                              ? "result".tr()
+                              : "next".tr(),
                           onPressed: cubit.onNext,
                         )
                             .animate()
                             .fadeIn(duration: 400.ms, delay: 150.ms)
                             .moveY(begin: 20, end: 0, duration: 400.ms),
+
                         verticalSpace(20),
                       ],
                     ),

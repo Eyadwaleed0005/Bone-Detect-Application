@@ -1,5 +1,6 @@
 import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FracturedParagraph extends StatelessWidget {
   const FracturedParagraph({super.key});
@@ -13,14 +14,14 @@ class FracturedParagraph extends StatelessWidget {
       text: TextSpan(
         style: baseStyle,
         children: [
-          const TextSpan(
-            text:
-                "The AI analysis indicates a potential bone fracture.\n\n"
-                "There is a strong possibility of a fracture based on the model analysis.\n\n",
+          TextSpan(
+            text: "fracture_p1".tr(),
           ),
           TextSpan(
-            text:
-                "Please consult a medical specialist as soon as possible to confirm the diagnosis and begin appropriate treatment.",
+            text: "\n\n${'fracture_p2'.tr()}\n\n",
+          ),
+          TextSpan(
+            text: "fracture_warning".tr(),
             style: highlightStyle,
           ),
         ],

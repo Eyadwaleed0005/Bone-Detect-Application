@@ -1,5 +1,6 @@
 import 'package:bonedetect/ui/auth_screen/login_screen/ui/login_screen.dart';
 import 'package:bonedetect/ui/home_screen/ui/home_screen.dart';
+import 'package:bonedetect/ui/language_screen/ui/language_screen.dart';
 import 'package:bonedetect/ui/on_bording_screen/ui/on_bording_screen.dart';
 import 'package:bonedetect/ui/auth_screen/sign_up_screen/ui/sign_up_screen.dart';
 import 'package:bonedetect/ui/question_screen/ui/question_screen.dart';
@@ -14,6 +15,9 @@ class AppRoutes {
     switch (settings.name) {
       case RouteNames.startScreen:
         return MaterialPageRoute(builder: (_) => const StartScreen());
+
+       case RouteNames.languageScreen:
+        return MaterialPageRoute(builder: (_) => const LanguageScreen());
 
       case RouteNames.onBordingScreen:
         return MaterialPageRoute(builder: (_) => const OnBordingScreen());

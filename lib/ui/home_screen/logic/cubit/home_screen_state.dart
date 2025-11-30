@@ -1,34 +1,37 @@
 part of 'home_screen_cubit.dart';
 
 @immutable
-sealed class HomeScreenState {}
+abstract class HomeScreenState {}
 
-final class HomeScreenInitial extends HomeScreenState {}
+class HomeScreenInitial extends HomeScreenState {}
 
-final class HomeScreenLoading extends HomeScreenState {}
+class HomeScreenLoading extends HomeScreenState {}
 
-final class HomeScreenLoaded extends HomeScreenState {
+class HomeScreenLoaded extends HomeScreenState {
   final String userName;
   HomeScreenLoaded(this.userName);
 }
 
-final class HomeScreenShowPreview extends HomeScreenState {
+class HomeScreenShowPreview extends HomeScreenState {
   final File imageFile;
   HomeScreenShowPreview(this.imageFile);
 }
 
-final class HomeScreenPredictionLoading extends HomeScreenState {}
+class HomeScreenPredictionLoading extends HomeScreenState {}
 
-final class HomeScreenPredictionSuccess extends HomeScreenState {
+class HomeScreenPredictionSuccess extends HomeScreenState {
   final FractureResultModel result;
-
   HomeScreenPredictionSuccess(this.result);
 }
 
-final class HomeScreenPredictionError extends HomeScreenState {
+class HomeScreenPredictionError extends HomeScreenState {
   final String message;
   HomeScreenPredictionError(this.message);
 }
 
 class HomeScreenLogoutSuccess extends HomeScreenState {}
 
+class HomeScreenLanguageChanged extends HomeScreenState {
+  final Locale newLocale;
+  HomeScreenLanguageChanged(this.newLocale);
+}

@@ -3,12 +3,13 @@ import 'package:bonedetect/ui/on_bording_screen/logic/cubit/on_bording_screen_cu
 import 'package:bonedetect/ui/on_bording_screen/logic/cubit/on_bording_screen_state.dart';
 import 'package:bonedetect/ui/on_bording_screen/ui/widgets/skip_button.dart';
 import 'package:bonedetect/ui/on_bording_screen/ui/widgets/onb_footer.dart';
-import 'package:bonedetect/ui/on_bording_screen/ui/widgets/onb_page_content.dart'; 
+import 'package:bonedetect/ui/on_bording_screen/ui/widgets/onb_page_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bonedetect/core/style/app_color.dart';
 import 'package:bonedetect/core/routes/app_images_routes.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnBordingScreen extends StatelessWidget {
   const OnBordingScreen({super.key});
@@ -32,7 +33,7 @@ class _OnBordingView extends StatelessWidget {
       listenWhen: (prev, curr) => prev.action != curr.action,
       listener: (context, state) {
         if (state.action == OnbAction.navigateLogin) {
-          Navigator.pushReplacementNamed(context,RouteNames.loginScreen);
+          Navigator.pushReplacementNamed(context, RouteNames.loginScreen);
         }
       },
       child: Scaffold(
@@ -62,8 +63,8 @@ class _OnBordingView extends StatelessWidget {
                               p['image'] == null ? AppImage().bone : p['image']!;
                           return OnbPageContent(
                             imagePath: imagePath,
-                            title: p['title']!,
-                            subtitle: p['subtitle']!,
+                            title: p['title']!.tr(),
+                            subtitle: p['subtitle']!.tr(),
                             isActive: state.index == i,
                           );
                         },

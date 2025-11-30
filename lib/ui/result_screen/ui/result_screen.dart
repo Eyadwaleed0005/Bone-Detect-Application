@@ -11,12 +11,15 @@ import 'package:bonedetect/ui/result_screen/ui/widgets/not_fractured_paragraph.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
 
   String _getResultTitle(bool isFractured) {
-    return isFractured ? "Fracture Detected" : "No Fracture Detected";
+    return isFractured
+        ? "result_fractured_title".tr()
+        : "result_not_fractured_title".tr();
   }
 
   Color _getResultColor(bool isFractured) {
@@ -48,6 +51,7 @@ class ResultScreen extends StatelessWidget {
                   final title = _getResultTitle(state.isFractured);
                   final color = _getResultColor(state.isFractured);
                   final icon = _getResultIcon(state.isFractured);
+
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
@@ -70,77 +74,70 @@ class ResultScreen extends StatelessWidget {
                         state.isFractured
                             ? const FracturedParagraph()
                             : const NotFracturedParagraph(),
+
                         if (state.isFractured) ...[
                           verticalSpace(24),
                           Text(
-                            "Emergency guidance videos",
+                            "result_emergency_videos_title".tr(),
                             style: Textstyles.font15blackBold(),
                           ),
                           verticalSpace(12),
                           EmergencyVideoCard(
-                            title:
-                                "How to treat a fracture – basic first aid steps",
-                            description:
-                                "Essential first-aid actions when a fracture is suspected.",
+                            title: "result_emg_video1_title".tr(),
+                            description: "result_emg_video1_desc".tr(),
                             imageAsset: AppImage().tmpPic1,
                             youtubeUrl:
                                 "https://www.youtube.com/watch?v=2v8vlXgGXwE",
                           ),
                           EmergencyVideoCard(
-                            title: "First aid for broken bones",
-                            description:
-                                "Learn how to immobilize broken bones safely.",
+                            title: "result_emg_video2_title".tr(),
+                            description: "result_emg_video2_desc".tr(),
                             imageAsset: AppImage().tmpPic2,
                             youtubeUrl:
                                 "https://www.youtube.com/watch?v=CP-vb0xxzFM",
                           ),
                           EmergencyVideoCard(
-                            title: "Fracture help – step-by-step",
-                            description:
-                                "How to support an injured area until reaching care.",
+                            title: "result_emg_video3_title".tr(),
+                            description: "result_emg_video3_desc".tr(),
                             imageAsset: AppImage().tmpPic3,
                             youtubeUrl:
                                 "https://www.youtube.com/watch?v=gL2iE0wYm8w",
                           ),
                         ],
+
                         if (!state.isFractured) ...[
                           verticalSpace(24),
                           Text(
-                            "Bone Strengthening Videos",
+                            "result_bone_videos_title".tr(),
                             style: Textstyles.font15blackBold(),
                           ),
                           verticalSpace(12),
-
                           EmergencyVideoCard(
-                            title: "Top foods to strengthen your bones",
-                            description:
-                                "Learn which foods naturally boost bone density.",
+                            title: "result_bone_video1_title".tr(),
+                            description: "result_bone_video1_desc".tr(),
                             imageAsset: AppImage().tmpPic4,
                             youtubeUrl:
                                 "https://www.youtube.com/watch?v=uu3wVnKekAs",
                           ),
-
                           EmergencyVideoCard(
-                            title: "Exercises to improve bone health",
-                            description:
-                                "Daily exercises that help keep your bones strong.",
+                            title: "result_bone_video2_title".tr(),
+                            description: "result_bone_video2_desc".tr(),
                             imageAsset: AppImage().tmpPic5,
                             youtubeUrl:
                                 "https://www.youtube.com/watch?v=y3DevSspTqw",
                           ),
-
                           EmergencyVideoCard(
-                            title: "Vitamin D & calcium explained",
-                            description:
-                                "The best ways to naturally increase vitamin D and calcium.",
+                            title: "result_bone_video3_title".tr(),
+                            description: "result_bone_video3_desc".tr(),
                             imageAsset: AppImage().tmpPic6,
                             youtubeUrl:
                                 "https://www.youtube.com/watch?v=DnTyX4HGWZ8",
                           ),
                         ],
+
                         verticalSpace(30),
                         AppButton(
-                          title: "Back",
+                          title: "back".tr(),
                           onPressed: () => Navigator.pop(context),
                         ),
                         verticalSpace(20),
@@ -148,6 +145,7 @@ class ResultScreen extends StatelessWidget {
                     ),
                   );
                 }
+
                 return const SizedBox.shrink();
               },
             ),

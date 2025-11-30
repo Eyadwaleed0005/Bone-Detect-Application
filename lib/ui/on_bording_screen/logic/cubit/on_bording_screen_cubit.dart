@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bonedetect/core/routes/app_images_routes.dart';
 import 'package:bonedetect/core/routes/route_names.dart';
 import 'package:flutter/material.dart';
+
 import 'on_bording_screen_state.dart';
 
 class OnBordingScreenCubit extends Cubit<OnBordingScreenState> {
@@ -12,18 +13,18 @@ class OnBordingScreenCubit extends Cubit<OnBordingScreenState> {
   final List<Map<String, String>> pages = [
     {
       'image': AppImage().xray,
-      'title': 'Smart Fracture Detection',
-      'subtitle': 'Upload X-ray and let AI assist in detecting fractures.',
+      'title': 'onb_title1',
+      'subtitle': 'onb_sub1',
     },
     {
       'image': AppImage().doctorWithXray,
-      'title': 'Seamless Upload',
-      'subtitle': 'Import images from camera or gallery in seconds.',
+      'title': 'onb_title2',
+      'subtitle': 'onb_sub2',
     },
     {
       'image': AppImage().report,
-      'title': 'Instant Reports',
-      'subtitle': 'Get clean, shareable reports ready for your workflow.',
+      'title': 'onb_title3',
+      'subtitle': 'onb_sub3',
     },
   ];
 

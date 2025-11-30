@@ -13,11 +13,13 @@ import 'package:bonedetect/ui/auth_screen/login_screen/logic/cubit/login_screen_
 import 'package:bonedetect/ui/auth_screen/login_screen/data/repo/login_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
+
   void _onLogin(BuildContext context) {
     FocusScope.of(context).unfocus();
     if (!(_formKey.currentState?.validate() ?? false)) return;
@@ -61,8 +63,9 @@ class LoginScreen extends StatelessWidget {
                 builder: (context, state) {
                   final cubit = context.read<LoginScreenCubit>();
                   final isLoading = state is LoginScreenLoading;
+
                   return LoginBottomContainer(
-                    title: "Welcome Back",
+                    title: "welcome_back".tr(),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -70,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           AppTextField(
                             controller: cubit.emailController,
-                            labelText: "Email",
+                            labelText: "email".tr(),
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             validator: ValidationData.validateEmail,
@@ -78,14 +81,14 @@ class LoginScreen extends StatelessWidget {
                           verticalSpace(16),
                           AppTextField(
                             controller: cubit.passwordController,
-                            labelText: "Password",
+                            labelText: "password".tr(),
                             isPassword: true,
                             textInputAction: TextInputAction.done,
                             validator: ValidationData.validatePassword,
                           ),
                           verticalSpace(18),
                           AppButton(
-                            title: "Login",
+                            title: "login".tr(),
                             onPressed: () => _onLogin(context),
                             isLoading: isLoading,
                           ),

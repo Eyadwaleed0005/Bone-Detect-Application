@@ -68,6 +68,15 @@ class Textstyles {
     );
   }
 
+  static TextStyle font19lightBlueaBold() {
+    return TextStyle(
+      fontSize: 19.sp,
+      fontWeight: FontWeightHelper.bold,
+      fontFamily: plusJakartaSans,
+      color: ColorPalette.lightBlue,
+    );
+  }
+
   static TextStyle font12lightBlueBold() {
     return TextStyle(
       fontSize: 12.sp,

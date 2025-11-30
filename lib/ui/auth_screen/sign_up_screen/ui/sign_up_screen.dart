@@ -13,11 +13,13 @@ import 'package:bonedetect/ui/auth_screen/sign_up_screen/ui/widgets/already_have
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bonedetect/core/widgets/animation_box.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
+
   final _formKey = GlobalKey<FormState>();
-  
+
   void _onSignUp(BuildContext context) {
     FocusScope.of(context).unfocus();
     if (!(_formKey.currentState?.validate() ?? false)) return;
@@ -54,15 +56,16 @@ class SignUpScreen extends StatelessWidget {
                       animationAsset: AppImage().errorAnimation,
                       autoClose: true,
                       duration: const Duration(seconds: 3),
-                      textStyle: Textstyles.font16whitebold()
+                      textStyle: Textstyles.font16whitebold(),
                     );
                   }
                 },
                 builder: (context, state) {
                   final cubit = context.read<SignUpCubit>();
                   final isLoading = state is SignUpLoading;
+
                   return LoginBottomContainer(
-                    title: "Create Account",
+                    title: "create_account".tr(),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -70,14 +73,14 @@ class SignUpScreen extends StatelessWidget {
                         children: [
                           AppTextField(
                             controller: cubit.nameController,
-                            labelText: "Full Name",
+                            labelText: "full_name".tr(),
                             textInputAction: TextInputAction.next,
                             validator: ValidationData.validateName,
                           ),
                           verticalSpace(16),
                           AppTextField(
                             controller: cubit.emailController,
-                            labelText: "Email",
+                            labelText: "email".tr(),
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             validator: ValidationData.validateEmail,
@@ -85,14 +88,14 @@ class SignUpScreen extends StatelessWidget {
                           verticalSpace(16),
                           AppTextField(
                             controller: cubit.passwordController,
-                            labelText: "Password",
+                            labelText: "password".tr(),
                             isPassword: true,
                             textInputAction: TextInputAction.done,
                             validator: ValidationData.validatePassword,
                           ),
                           verticalSpace(18),
                           AppButton(
-                            title: "Sign Up",
+                            title: "sign_up".tr(),
                             onPressed: () => _onSignUp(context),
                             isLoading: isLoading,
                           ),

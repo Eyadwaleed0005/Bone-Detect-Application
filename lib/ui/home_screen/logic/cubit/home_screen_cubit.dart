@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui'show Locale; 
 import 'package:bloc/bloc.dart';
 import 'package:bonedetect/core/local/secure_storage.dart';
 import 'package:bonedetect/core/local/secure_storage_keys.dart';
@@ -30,6 +31,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     emit(HomeScreenLoaded(_userName));
   }
 
+  void toggleLanguage(Locale currentLocale) {
+    final Locale newLocale = currentLocale.languageCode == 'en'
+        ? const Locale('ar')
+        : const Locale('en');
+
+    emit(HomeScreenLanguageChanged(newLocale));
+  }
+
   Future<void> pickFromGallery() async {
     final picker = ImagePicker();
     final XFile? picked = await picker.pickImage(source: ImageSource.gallery);
@@ -45,41 +54,36 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   }
 
   Future<void> sendImageForPrediction(File imageFile) async {
-  _lastImageFile = imageFile;
-  emit(HomeScreenPredictionLoading());
+    _lastImageFile = imageFile;
+    emit(HomeScreenPredictionLoading());
+    final result = await _repo.predictFracture(imageFile: imageFile);
+    result.fold(
+      (errorMessage) {
+        emit(HomeScreenPredictionError(errorMessage));
+      },
+      (FractureResultModel model) async {
+        await SharedPreferencesHelper.saveBool(
+          key: SharedPreferenceKeys.isFractured,
+          value: model.isFractured,
+        );
+        await SharedPreferencesHelper.saveDouble(
+          key: SharedPreferenceKeys.confidence,
+          value: model.confidence,
+        );
+        await SharedPreferencesHelper.saveString(
+          key: SharedPreferenceKeys.visionSummary,
+          value: model.visionSummary,
+        );
+        emit(HomeScreenPredictionSuccess(model));
+      },
+    );
+  }
 
-  final result = await _repo.predictFracture(imageFile: imageFile);
-
-  result.fold(
-    (errorMessage) {
-      emit(HomeScreenPredictionError(errorMessage));
-    },
-    (FractureResultModel model) async {
-
-      await SharedPreferencesHelper.saveBool(
-        key: SharedPreferenceKeys.isFractured,
-        value: model.isFractured,
-      );
-
-      await SharedPreferencesHelper.saveDouble(
-        key: SharedPreferenceKeys.confidence,
-        value: model.confidence,
-      );
-
-      await SharedPreferencesHelper.saveString(
-        key: SharedPreferenceKeys.visionSummary,
-        value: model.visionSummary,
-      );
-
-      emit(HomeScreenPredictionSuccess(model));
-    },
-  );
-}
-
-Future<void> logout() async {
-  await SharedPreferencesHelper.removeData(key: SharedPreferenceKeys.userName);
-  await SecureStorageHelper.delete(SecureStorageKeys.token);
-  emit(HomeScreenLogoutSuccess());
-}
-
+  Future<void> logout() async {
+    await SharedPreferencesHelper.removeData(
+      key: SharedPreferenceKeys.userName,
+    );
+    await SecureStorageHelper.delete(SecureStorageKeys.token);
+    emit(HomeScreenLogoutSuccess());
+  }
 }

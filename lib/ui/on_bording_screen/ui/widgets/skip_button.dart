@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:bonedetect/core/style/textstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SkipButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -14,7 +15,7 @@ class SkipButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Text(
-          'Skip',
+          'skip'.tr(),  
           style: Textstyles.font12whitemedium(),
         )
             .animate()

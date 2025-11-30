@@ -73,7 +73,7 @@ class StartScreen extends StatelessWidget {
                     StartButton(
                       onTap: () async {
                         await startCubit.markAsViewed();
-                        Navigator.pushNamed(context, RouteNames.onBordingScreen);
+                        Navigator.pushNamed(context, RouteNames.languageScreen);
                       },
                     )
                         .animate()

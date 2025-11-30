@@ -2,21 +2,25 @@ import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AlreadyHaveAccount extends StatelessWidget {
   const AlreadyHaveAccount({
     super.key,
     required this.onTap,
-    this.questionText = "Already have an account? ",
-    this.actionText = "Login",
+    this.questionText,
+    this.actionText,
     this.alignment = Alignment.center,
     this.padding,
   });
 
   final VoidCallback onTap;
-  final String questionText;
-  final String actionText;
+
+  final String? questionText;
+  final String? actionText;
+
   final Alignment alignment;
+
   final EdgeInsetsGeometry? padding;
 
   @override
@@ -29,9 +33,11 @@ class AlreadyHaveAccount extends StatelessWidget {
           text: TextSpan(
             style: Textstyles.font12blackregular(),
             children: [
-              TextSpan(text: questionText),
               TextSpan(
-                text: actionText,
+                text: (questionText ?? "already_have_account".tr()),
+              ),
+              TextSpan(
+                text: (actionText ?? "login".tr()),
                 style: Textstyles.font12lightBlueBold(),
                 recognizer: TapGestureRecognizer()..onTap = onTap,
               ),

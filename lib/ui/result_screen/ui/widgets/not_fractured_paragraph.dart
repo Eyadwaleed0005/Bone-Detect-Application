@@ -1,5 +1,6 @@
 import 'package:bonedetect/core/style/textstyles.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NotFracturedParagraph extends StatelessWidget {
   const NotFracturedParagraph({super.key});
@@ -13,22 +14,18 @@ class NotFracturedParagraph extends StatelessWidget {
       text: TextSpan(
         style: baseStyle,
         children: [
-          const TextSpan(
-            text:
-                "The AI analysis does not detect any bone fracture in the uploaded image.\n\n",
+          TextSpan(
+            text: "not_fractured_p1".tr(),
           ),
           TextSpan(
-            text:
-                "If the image is not an actual medical X-ray (e.g., a normal camera photo), the model will also classify it as 'no fracture'.\n",
+            text: "\n\n${'not_fractured_p2'.tr()}\n\n",
             style: highlightStyle,
           ),
-          const TextSpan(
-            text:
-                "Please make sure you upload a proper medical X-ray for accurate results.\n\n",
+          TextSpan(
+            text: "${'not_fractured_p3'.tr()}\n\n",
           ),
           TextSpan(
-            text:
-                "If you still feel pain or symptoms, it is recommended to consult a medical specialist.",
+            text: "not_fractured_p4".tr(),
             style: highlightStyle,
           ),
         ],
